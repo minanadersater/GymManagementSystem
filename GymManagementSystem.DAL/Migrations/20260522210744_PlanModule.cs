@@ -3,16 +3,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace GymManagementSystem.Migrations
+namespace GymManagementSystem.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class ModelPlan : Migration
+    public partial class PlanModule : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Plans",
+                name: "Plans", 
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)

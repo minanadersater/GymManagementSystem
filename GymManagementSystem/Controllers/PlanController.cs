@@ -1,4 +1,6 @@
-﻿using GymManagementSystem.Context;
+﻿using GymManagementSystem.DAL.Context;
+using GymManagementSystem.DAL.Repositories.Classes;
+using GymManagementSystem.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,23 +8,44 @@ namespace GymManagementSystem.Controllers
 {
     public class PlanController : Controller
     {
-        private readonly GymDbcontext dbContext = new GymDbcontext();
 
-        //private readonly GymDbcontext _dbContext;
-                
+        private readonly IPlanRepository planRepository;
+        public PlanController(IPlanRepository _planRepository) 
+        {
+            planRepository = _planRepository;
 
+        }
         public async Task<IActionResult> Index()
         {
-            var plans = await dbContext.Plans.ToListAsync();
+            var plans = await planRepository.GetAll();
             return View(plans);
         }
-
-
-        public async Task<IActionResult> Index2()
+        public async Task<IActionResult> Details(int id)
         {
-            var plans = await dbContext.Plans.ToListAsync();
-            return View(plans);
+            var plan = await planRepository.GetById(id);
+            if (plan == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(plan);
         }
+
+        //private readonly GymDbcontext dbContext = new GymDbcontext();
+
+
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    var plans = await dbContext.Plans.ToListAsync();
+        //    return View(plans);
+        //}
+
+
+        //public async Task<IActionResult> Index2()
+        //{
+        //    var plans = await dbContext.Plans.ToListAsync();
+        //    return View(plans);
+        //}
         //public async Task<IActionResult> Details(int id)
         //{
         //    var plan = await _dbContext.Plans.FirstOrDefaultAsync(p => p.Id == id);
@@ -33,17 +56,17 @@ namespace GymManagementSystem.Controllers
         //    return View(plan);
         //}
 
-        public async Task<IActionResult> Details(int id)
-        {
-            var plan = await dbContext.Plans
-                .FirstOrDefaultAsync(p => p.Id == id);
+        //public async Task<IActionResult> Details(int id)
+        //{
+        //    var plan = await dbContext.Plans
+        //        .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (plan == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
+        //    if (plan == null)
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
 
-            return View(plan);
-        }
+        //    return View(plan);
+        //}
     }
 }

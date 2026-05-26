@@ -1,7 +1,16 @@
+using GymManagementSystem.DAL.Repositories.Interfaces;
+using GymManagementSystem.DAL.Repositories.Classes;
+using GymManagementSystem.DAL.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<GymDbcontext>();
+builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+
+
+
 
 
 var app = builder.Build();
