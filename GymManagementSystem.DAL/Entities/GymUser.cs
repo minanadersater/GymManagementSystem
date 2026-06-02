@@ -29,11 +29,11 @@ namespace GymManagementSystem.DAL.Entities
         public Gender Gender { get; set; }
 
         // Owned value object — flattened into the DB row
-         Address Address { get; set; } = null!;
+        public Address Address { get; set; } = null!;
     }
     [Owned]
     public class Address
-    {
+    { 
         public int BuildingNumber { get; set; }
         [Required, MaxLength(30)]
         public string City { get; set; } = null!;

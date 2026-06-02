@@ -1,8 +1,8 @@
-﻿using GymSystemG03.DAL.Entities;
+﻿using GymManagementSystem.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GymSystemG03.DAL.Configurations
+namespace GymManagementSystem.DAL.Configurations
 {
     internal class SessionConfigurations : IEntityTypeConfiguration<Session>
     {
@@ -10,8 +10,15 @@ namespace GymSystemG03.DAL.Configurations
         {
             builder.ToTable(T =>
             {
-                T.HasCheckConstraint("SessionCapacityConstraint", "Capacity between 1 and 25");
-                T.HasCheckConstraint("SessionEndDateAfterStartDate", "EndDate > StartDate");
+                T.HasCheckConstraint(
+                    "SessionCapacityConstraint",
+                    "Capacity BETWEEN 1 AND 25"
+                );
+
+                T.HasCheckConstraint(
+                    "SessionEndDateAfterStartDate",
+                    "[EndTime] > [StartTime]"
+                );
             });
 
             builder.HasOne(X => X.Trainer)
@@ -21,8 +28,6 @@ namespace GymSystemG03.DAL.Configurations
             builder.HasOne(X => X.Category)
                 .WithMany(X => X.Sessions)
                 .HasForeignKey(X => X.CategoryId);
-
-
         }
     }
 }

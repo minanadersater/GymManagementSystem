@@ -1,4 +1,5 @@
 ﻿using GymManagementSystem.DAL.Context;
+using GymManagementSystem.DAL.Entities;
 using GymManagementSystem.DAL.Repositories.Classes;
 using GymManagementSystem.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -9,15 +10,15 @@ namespace GymManagementSystem.Controllers
     public class PlanController : Controller
     {
 
-        private readonly IPlanRepository planRepository;
-        public PlanController(IPlanRepository _planRepository) 
+        private readonly IGenericRepository<Plan> planRepository;
+        public PlanController(IGenericRepository<Plan> _planRepository) 
         {
             planRepository = _planRepository;
 
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken token)
         {
-            var plans = await planRepository.GetAll();
+            var plans = await planRepository.GetAll(false, token);
             return View(plans);
         }
         public async Task<IActionResult> Details(int id)
