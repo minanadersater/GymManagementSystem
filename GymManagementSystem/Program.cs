@@ -2,6 +2,8 @@ using GymManagementSystem.DAL.Repositories.Interfaces;
 using GymManagementSystem.DAL.Repositories.Classes;
 using GymManagementSystem.DAL.Context;
 using Microsoft.EntityFrameworkCore;
+using GymManagementSystem.BLL.Services.Interfaces;
+using GymManagementSystem.BLL.Services.Classes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +16,10 @@ builder.Services.AddDbContext<GymDbcontext>(options =>
 
 //builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+//builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IMemberServices, MemberServices>();
 
 var app = builder.Build();
 

@@ -31,7 +31,8 @@ namespace GymManagementSystem.BLL.ViewModels.MembersViewModels
         public DateOnly DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Gender is required")]
-        public Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
+
 
         [Required(ErrorMessage = "Building Number Is Required")]
         [Range(1, 9000, ErrorMessage = "Building Number must be greater than 0")]

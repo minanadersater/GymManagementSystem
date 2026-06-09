@@ -28,6 +28,7 @@ namespace GymManagementSystem.DAL.Entities
         public DateOnly DateOfBirth { get; set; }
         public Gender Gender { get; set; }
 
+
         // Owned value object — flattened into the DB row
         public Address Address { get; set; } = null!;
     }
@@ -41,6 +42,6 @@ namespace GymManagementSystem.DAL.Entities
         public string Street { get; set; } = null!;
         
     }
-    public enum Gender { Male, Female }
+
 
 }
