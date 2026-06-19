@@ -4,6 +4,7 @@ using GymManagementSystem.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using GymManagementSystem.BLL.Services.Interfaces;
 using GymManagementSystem.BLL.Services.Classes;
+using GymManagementSystem.BLL.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,13 @@ builder.Services.AddDbContext<GymDbcontext>(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IMemberServices, MemberServices>();
+builder.Services.AddScoped<ISessionServices, SessionServices>();
+builder.Services.AddScoped(
+    typeof(IGenericRepository<>),
+    typeof(GenericRepository<>)
+);
+
+builder.Services.AddAutoMapper(m=>m.AddProfile(new MappingProfile()));
 
 var app = builder.Build();
 

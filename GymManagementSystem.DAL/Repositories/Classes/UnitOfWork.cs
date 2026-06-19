@@ -1,6 +1,7 @@
 ﻿using GymManagementSystem.DAL.Context;
 using GymManagementSystem.DAL.Entities;
 using GymManagementSystem.DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,14 @@ namespace GymManagementSystem.DAL.Repositories.Classes
         public UnitOfWork(GymDbcontext dbContext)
         {
             this.dbContext = dbContext;
+            SessionRepository = new SessionRepository(dbContext); 
         }
+
+        public ISessionRepository SessionRepository { get; }
+
         public async Task<int> CompleteAsync()
         {
+
            return await dbContext.SaveChangesAsync();
         }
 
@@ -34,5 +40,9 @@ namespace GymManagementSystem.DAL.Repositories.Classes
             _Repos[TypeName] = NewRepository;
             return NewRepository;
         }
+
+
+
+
     }
 }

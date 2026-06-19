@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GymManagementSystem.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class inial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,12 +29,12 @@ namespace GymManagementSystem.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Member",
+                name: "Members",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JoinDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
@@ -48,7 +48,7 @@ namespace GymManagementSystem.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Member", x => x.Id);
+                    table.PrimaryKey("PK_Members", x => x.Id);
                     table.CheckConstraint("GymUser_EmailCheck", "Email LIKE '_%@_%._%'");
                     table.CheckConstraint("GymUser_PhoneCheck", "[Phone] LIKE '010%' OR [Phone] LIKE '011%' OR [Phone] LIKE '012%' OR [Phone] LIKE '015%'");
                 });
@@ -117,9 +117,9 @@ namespace GymManagementSystem.DAL.Migrations
                 {
                     table.PrimaryKey("PK_HealthRecord", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HealthRecord_Member_MemberId",
+                        name: "FK_HealthRecord_Members_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "Member",
+                        principalTable: "Members",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -140,9 +140,9 @@ namespace GymManagementSystem.DAL.Migrations
                 {
                     table.PrimaryKey("PK_Membership", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Membership_Member_MemberId",
+                        name: "FK_Membership_Members_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "Member",
+                        principalTable: "Members",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -154,14 +154,14 @@ namespace GymManagementSystem.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Session",
+                name: "Sessions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Capacity = table.Column<int>(type: "int", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TrainerId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
@@ -170,17 +170,17 @@ namespace GymManagementSystem.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Session", x => x.Id);
+                    table.PrimaryKey("PK_Sessions", x => x.Id);
                     table.CheckConstraint("SessionCapacityConstraint", "Capacity BETWEEN 1 AND 25");
-                    table.CheckConstraint("SessionEndDateAfterStartDate", "[EndTime] > [StartTime]");
+                    table.CheckConstraint("SessionEndDateAfterStartDate", "[EndTime] > [StartDate]");
                     table.ForeignKey(
-                        name: "FK_Session_Category_CategoryId",
+                        name: "FK_Sessions_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Session_Trainer_TrainerId",
+                        name: "FK_Sessions_Trainer_TrainerId",
                         column: x => x.TrainerId,
                         principalTable: "Trainer",
                         principalColumn: "Id",
@@ -188,7 +188,7 @@ namespace GymManagementSystem.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Booking",
+                name: "Bookings",
                 columns: table => new
                 {
                     MemberId = table.Column<int>(type: "int", nullable: false),
@@ -199,17 +199,17 @@ namespace GymManagementSystem.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Booking", x => new { x.SessionId, x.MemberId });
+                    table.PrimaryKey("PK_Bookings", x => new { x.SessionId, x.MemberId });
                     table.ForeignKey(
-                        name: "FK_Booking_Member_MemberId",
+                        name: "FK_Bookings_Members_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "Member",
+                        principalTable: "Members",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Booking_Session_SessionId",
+                        name: "FK_Bookings_Sessions_SessionId",
                         column: x => x.SessionId,
-                        principalTable: "Session",
+                        principalTable: "Sessions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -227,8 +227,8 @@ namespace GymManagementSystem.DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Booking_MemberId",
-                table: "Booking",
+                name: "IX_Bookings_MemberId",
+                table: "Bookings",
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
@@ -238,14 +238,14 @@ namespace GymManagementSystem.DAL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Member_Email",
-                table: "Member",
+                name: "IX_Members_Email",
+                table: "Members",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Member_Phone",
-                table: "Member",
+                name: "IX_Members_Phone",
+                table: "Members",
                 column: "Phone",
                 unique: true);
 
@@ -260,13 +260,13 @@ namespace GymManagementSystem.DAL.Migrations
                 column: "PlanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Session_CategoryId",
-                table: "Session",
+                name: "IX_Sessions_CategoryId",
+                table: "Sessions",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Session_TrainerId",
-                table: "Session",
+                name: "IX_Sessions_TrainerId",
+                table: "Sessions",
                 column: "TrainerId");
 
             migrationBuilder.CreateIndex(
@@ -286,7 +286,7 @@ namespace GymManagementSystem.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Booking");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "HealthRecord");
@@ -295,10 +295,10 @@ namespace GymManagementSystem.DAL.Migrations
                 name: "Membership");
 
             migrationBuilder.DropTable(
-                name: "Session");
+                name: "Sessions");
 
             migrationBuilder.DropTable(
-                name: "Member");
+                name: "Members");
 
             migrationBuilder.DropTable(
                 name: "Plans");

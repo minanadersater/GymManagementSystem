@@ -10,7 +10,7 @@ namespace GymManagementSystem.DAL.Entities
     {
         public string Description { get; set; } = null!;
         public int Capacity { get; set; }
-        public DateTime StartTime { get; set; }
+        public DateTime StartDate { get; set; }
         public DateTime EndTime { get; set; }
 
         public Trainer Trainer { get; set; } = null!;

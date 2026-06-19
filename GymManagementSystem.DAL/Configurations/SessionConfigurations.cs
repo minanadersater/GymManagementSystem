@@ -17,7 +17,7 @@ namespace GymManagementSystem.DAL.Configurations
 
                 T.HasCheckConstraint(
                     "SessionEndDateAfterStartDate",
-                    "[EndTime] > [StartTime]"
+                    "[EndTime] > [StartDate]"
                 );
             });
 

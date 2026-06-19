@@ -64,7 +64,7 @@ namespace GymManagementSystem.DAL.Repositories.Classes
 
         public void Update(TEntity item)
         {
-            dbContext.Set<TEntity>().Add(item);
+            dbContext.Set<TEntity>().Update(item);
         }
     }
 }

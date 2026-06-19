@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymManagementSystem.DAL.Migrations
 {
     [DbContext(typeof(GymDbcontext))]
-    [Migration("20260604113540_all")]
-    partial class all
+    [Migration("20260613143532_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,7 +49,7 @@ namespace GymManagementSystem.DAL.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Booking");
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("GymManagementSystem.DAL.Entities.Category", b =>
@@ -184,7 +184,6 @@ namespace GymManagementSystem.DAL.Migrations
                         .HasColumnType("varchar");
 
                     b.Property<string>("Photo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -308,7 +307,7 @@ namespace GymManagementSystem.DAL.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("TrainerId")
@@ -323,11 +322,11 @@ namespace GymManagementSystem.DAL.Migrations
 
                     b.HasIndex("TrainerId");
 
-                    b.ToTable("Session", t =>
+                    b.ToTable("Sessions", t =>
                         {
                             t.HasCheckConstraint("SessionCapacityConstraint", "Capacity BETWEEN 1 AND 25");
 
-                            t.HasCheckConstraint("SessionEndDateAfterStartDate", "[EndTime] > [StartTime]");
+                            t.HasCheckConstraint("SessionEndDateAfterStartDate", "[EndTime] > [StartDate]");
                         });
                 });
 

@@ -28,5 +28,8 @@ namespace GymManagementSystem.DAL.Context
         }
         public DbSet<Plan> Plans { get; set; } 
         public DbSet<Member> Members { get; set; }
+        public DbSet<Session> Sessions { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+
     }
 }
