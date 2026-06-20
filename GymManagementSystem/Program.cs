@@ -22,6 +22,7 @@ builder.Services.AddDbContext<GymDbcontext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IMemberServices, MemberServices>();
 builder.Services.AddScoped<ISessionServices, SessionServices>();
+builder.Services.AddScoped<ITrainerServices, TrainerServices>();
 builder.Services.AddScoped(
     typeof(IGenericRepository<>),
     typeof(GenericRepository<>)

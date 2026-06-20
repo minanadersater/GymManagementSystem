@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GymManagementSystem.BLL.ViewModels.SessionViewModels;
+using GymManagementSystem.BLL.ViewModels.TrainerViewModels;
 using GymManagementSystem.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace GymManagementSystem.BLL.Utilities
 {
-    public class MappingProfile:Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
             MapSession();
+            MapTrainer();
         }
         private void MapSession()
         {
@@ -34,7 +36,7 @@ namespace GymManagementSystem.BLL.Utilities
                 dest => dest.EndTime,
                 opt => opt.MapFrom(src => src.EndDate)
             );
-           // CreateMap<Session, UpdateSessionViewModel>().ReverseMap();
+            // CreateMap<Session, UpdateSessionViewModel>().ReverseMap();
 
             CreateMap<Session, UpdateSessionViewModel>()
     .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndTime))
@@ -62,5 +64,54 @@ namespace GymManagementSystem.BLL.Utilities
 
         //    CreateMap<Category, CategorySelectViewModel>();
         //}
+
+        private void MapTrainer()
+        {
+           // CreateMap<Trainer, TrainerViewModel>();
+            CreateMap<Trainer, TrainerViewModel>()
+    .ForMember(dest => dest.Address,
+        opt => opt.MapFrom(src =>
+            src.Address == null
+                ? ""
+                : $"{src.Address.BuildingNumber}, {src.Address.Street}, {src.Address.City}"
+        )).ForMember(dest => dest.Specialties,
+        opt => opt.MapFrom(src => src.Specialize));
+
+            CreateMap<CreateTrainerViewModel, Trainer>()
+                .ForMember(dest => dest.Specialize,
+                    opt => opt.MapFrom(src => src.Specialties))
+                .ForMember(dest => dest.Address,
+                    opt => opt.MapFrom(src => new Address
+                    {
+                        BuildingNumber = src.BuildingNumber,
+                        City = src.City,
+                        Street = src.Street
+                    }));
+            //CreateMap<TrainerToUpdateViewModel, Trainer>().ReverseMap();
+            //  CreateMap<Trainer, TrainerDetailsViewModel>();
+
+
+            CreateMap<TrainerToUpdateViewModel, Trainer>()
+    .ForMember(dest => dest.Address,
+        opt => opt.MapFrom(src => new Address
+        {
+            BuildingNumber = src.BuildingNumber,
+            City = src.City,
+            Street = src.Street
+        }))
+       .ForMember(dest => dest.Specialize,
+        opt => opt.MapFrom(src => src.Specialties));
+            
+
+            CreateMap<Trainer, TrainerToUpdateViewModel>()
+    .ForMember(dest => dest.BuildingNumber,
+        opt => opt.MapFrom(src => src.Address.BuildingNumber))
+    .ForMember(dest => dest.City,
+        opt => opt.MapFrom(src => src.Address.City))
+    .ForMember(dest => dest.Street,
+        opt => opt.MapFrom(src => src.Address.Street));
+        }
+
+
     }
 }

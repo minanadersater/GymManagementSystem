@@ -25,11 +25,16 @@ namespace GymManagementSystem.DAL.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            modelBuilder.Entity<Trainer>().OwnsOne(t => t.Address);
         }
         public DbSet<Plan> Plans { get; set; } 
         public DbSet<Member> Members { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Trainer> Trainers { get; set; }
+
+       
 
     }
 }

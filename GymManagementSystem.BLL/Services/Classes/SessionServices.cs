@@ -90,6 +90,7 @@ namespace GymManagementSystem.BLL.Services.Classes
             //}
             
             var MappedSessions = mapper.Map<IEnumerable<Session>,IEnumerable<SessionViewModel>>(Sessions);
+           // var MappedSessions = mapper.Map<IEnumerable<Session>,IEnumerable<SessionViewModel>>(Sessions);
 
                        
             foreach (var session in MappedSessions)
