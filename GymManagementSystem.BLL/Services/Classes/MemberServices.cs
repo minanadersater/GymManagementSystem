@@ -18,6 +18,7 @@ namespace GymManagementSystem.BLL.Services.Classes
     public class MemberServices : IMemberServices
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IAttachementServices attachmentServices;
 
         //private readonly IGenericRepository<Plan> planRepository;
         //public readonly IGenericRepository<Booking> bookingRepository;
@@ -40,9 +41,10 @@ namespace GymManagementSystem.BLL.Services.Classes
         //    this.bookingRepository = bookingRepository;
         //}
 
-        public MemberServices(IUnitOfWork unitOfWork) 
+        public MemberServices(IUnitOfWork unitOfWork, IAttachementServices attachmentServices) 
         {
             this.unitOfWork = unitOfWork;
+            this.attachmentServices = attachmentServices;
         }
         //get
 
@@ -135,19 +137,20 @@ namespace GymManagementSystem.BLL.Services.Classes
         }
 
         //post
+
         public async Task<bool> CreateMemberAsync(CreateMemberViewModel model, CancellationToken ct = default)
         {
-            var emailExist =  await unitOfWork.GetRepository<Member>().AnyAsync(m => m.Email == model.Email, ct);
+            var emailExist = await unitOfWork.GetRepository<Member>().AnyAsync(m => m.Email == model.Email, ct);
             var phoneExist = await unitOfWork.GetRepository<Member>().AnyAsync(m => m.Phone == model.Phone, ct);
 
             if (emailExist || phoneExist) return false;
+
             var Member = new Member()
             {
                 Name = model.Name,
                 Email = model.Email,
                 Phone = model.Phone,
                 DateOfBirth = model.DateOfBirth,
-                // 
                 Gender = model.Gender.Value,
                 Address = new Address()
                 {
@@ -161,14 +164,20 @@ namespace GymManagementSystem.BLL.Services.Classes
                     Height = model.HealthRecordViewModel.Height,
                     BloodType = model.HealthRecordViewModel.BloodType,
                     Note = model.HealthRecordViewModel.Note,
-                }             
+                }
             };
+
+            if (model.PhotoFile != null)
+            {
+                using var stream = model.PhotoFile.OpenReadStream();
+                var photo = await attachmentServices.UploadAsync(stream, Guid.NewGuid().ToString(), "Members", ct);
+                Member.Photo = photo;
+            }
 
             unitOfWork.GetRepository<Member>().Add(Member);
             var Result = await unitOfWork.CompleteAsync();
             return Result > 0;
         }
-
         public async Task<bool> UpdateMemberDetailsAsync(int id, MemberToUpdateViewModel model, CancellationToken ct = default)
         {
             var member = await unitOfWork.GetRepository<Member>().GetById(id, ct);
